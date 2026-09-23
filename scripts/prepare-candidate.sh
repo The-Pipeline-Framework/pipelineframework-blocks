@@ -32,3 +32,13 @@ cd "$repo_root"
   -DnewVersion="$candidate" -DprocessAllModules=true -DgenerateBackupPoms=false
 python3 "$repo_root/scripts/rewrite-reactor-dependencies.py" "$repo_root" "$candidate"
 echo "candidate=$candidate" >> "${GITHUB_OUTPUT:-/dev/null}"
+python3 - "$candidate" "$repo_root" <<'PY'
+import json, pathlib, sys
+path = pathlib.Path(sys.argv[2]) / ".candidate-version.json"
+path.write_text(json.dumps({"candidateVersion": sys.argv[1]}, sort_keys=True) + "\n")
+PY
+if [[ -n "${RUNNER_TEMP:-}" ]]; then
+  cp "$repo_root/.candidate-version.json" "$RUNNER_TEMP/tpf-candidate-version.json"
+else
+  cp "$repo_root/.candidate-version.json" "$repo_root/candidate-manifest.json"
+fi

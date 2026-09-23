@@ -12,7 +12,7 @@ source_repository = os.environ["SOURCE_REPOSITORY"]
 source_sha = os.environ["SOURCE_SHA"].lower()
 event = os.environ["GITHUB_EVENT_NAME"]
 pull_request = os.environ.get("PULL_REQUEST_NUMBER", "")
-candidate_version = json.loads(pathlib.Path("candidate-manifest.json").read_text())["candidateVersion"]
+candidate_version = json.loads((root / "candidate-manifest.json").read_text())["candidateVersion"]
 if event == "pull_request":
     if not pull_request.isdigit():
         raise SystemExit("pull request number is required for PR candidate metadata")
@@ -35,7 +35,7 @@ coordinates = [
 ]
 artifacts = []
 for group_id, artifact_id, packaging in coordinates:
-    directory = pathlib.Path("repository", *group_id.split("."), artifact_id, candidate_version)
+    directory = root / "repository" / pathlib.Path(*group_id.split(".")) / artifact_id / candidate_version
     names = [f"{artifact_id}-{candidate_version}.pom"]
     if packaging == "jar":
         names.append(f"{artifact_id}-{candidate_version}.jar")

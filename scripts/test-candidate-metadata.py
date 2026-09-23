@@ -41,7 +41,7 @@ for event, candidate_type, number in [("pull_request", "pr", "42"), ("push", "ma
         }
         (candidate_root / "candidate-manifest.json").write_text(json.dumps({"candidateVersion": candidate}))
         subprocess.run(["python3", str(ROOT / "scripts/create-build-metadata.py"), str(candidate_root)],
-                       check=True, cwd=candidate_root, env=env)
+                       check=True, cwd=ROOT, env=env)
         metadata = json.loads((candidate_root / "build-metadata.json").read_text())
         assert metadata["candidateVersion"] == candidate
         assert metadata["pullRequestNumber"] == (42 if number else None)

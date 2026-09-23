@@ -42,10 +42,8 @@ jobs:
           SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           PR_NUMBER: ${{ github.event.pull_request.number || '' }}
         run: bash scripts/system-tests.sh candidate-version "$EVENT_NAME" "${PR_NUMBER:--}" "$SOURCE_SHA" && bash scripts/system-tests.sh reactor-coordinates && bash scripts/system-tests.sh reactor-dependencies
-      - name: Verify candidate reactor
-        run: ./mvnw -B -Dmaven.repo.local="$PWD/.m2/repository" -Dmaven.deploy.skip=true -Dgpg.skip=true -Dtpf.flatten.skip=true verify
-      - name: Install candidate reactor files
-        run: ./mvnw -B -Dmaven.repo.local="$PWD/.m2/repository" -Dmaven.deploy.skip=true -Dgpg.skip=true -Dtpf.flatten.skip=true install
+      - name: Verify and install candidate reactor once
+        run: ./mvnw -B -Dmaven.repo.local="$PWD/.m2/repository" -Dmaven.deploy.skip=true -Dgpg.skip=true -Dtpf.flatten.skip=true clean install
       - name: Collect Maven files and preliminary build metadata
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -57,6 +55,7 @@ jobs:
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
           bash scripts/collect-candidate-files.sh "$RUNNER_TEMP/tpf-candidate-build"
+          cp "$RUNNER_TEMP/tpf-candidate-version.json" "$RUNNER_TEMP/tpf-candidate-build/candidate-manifest.json"
           python3 scripts/create-build-metadata.py "$RUNNER_TEMP/tpf-candidate-build"
       - name: Upload candidate files and preliminary build metadata
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
