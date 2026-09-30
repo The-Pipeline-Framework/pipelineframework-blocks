@@ -6,7 +6,7 @@
 
     <groupId>org.pipelineframework</groupId>
     <artifactId>pipeline-blocks</artifactId>
-    <version>26.9.4</version>
+    <version>26.10.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>The Pipeline Framework Blocks</name>
     <description>Packaged reusable pipeline Blocks for The Pipeline Framework</description>
