@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "namespace": "org.pipelineframework.chat",
+  "artifact": {
+    "groupId": "org.pipelineframework.blocks",
+    "artifactId": "chat-agent-core",
+    "version": "${project.version}"
+  },
+  "definitions": [
+    {
+      "name": "chat-context",
+      "resource": "META-INF/pipeline/chat-context.yaml",
+      "requires": {}
+    }
+  ]
+}

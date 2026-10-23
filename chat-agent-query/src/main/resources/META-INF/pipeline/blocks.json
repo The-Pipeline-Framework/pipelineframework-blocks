@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "namespace": "org.pipelineframework.chat",
+  "artifact": {
+    "groupId": "org.pipelineframework.blocks",
+    "artifactId": "chat-agent-query",
+    "version": "${project.version}"
+  },
+  "definitions": [
+    {
+      "name": "chat-agent-query",
+      "resource": "META-INF/pipeline/chat-agent-query.yaml",
+      "requires": {
+        "llm.decide": { "kind": "QUERY" },
+        "llm.synthesize": { "kind": "QUERY" }
+      }
+    }
+  ]
+}

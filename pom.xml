@@ -73,6 +73,9 @@
         <module>document-text-extraction</module>
         <module>graphql</module>
         <module>graphql-agent</module>
+        <module>chat-agent-core</module>
+        <module>chat-agent</module>
+        <module>chat-agent-query</module>
         <module>openapi-representation-mapper</module>
     </modules>
 

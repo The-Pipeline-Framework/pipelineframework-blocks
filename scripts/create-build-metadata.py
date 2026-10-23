@@ -31,6 +31,9 @@ coordinates = [
     ("org.pipelineframework.blocks", "document-text-extraction", "jar"),
     ("org.pipelineframework.blocks", "graphql", "jar"),
     ("org.pipelineframework.blocks", "graphql-agent", "jar"),
+    ("org.pipelineframework.blocks", "chat-agent-core", "jar"),
+    ("org.pipelineframework.blocks", "chat-agent", "jar"),
+    ("org.pipelineframework.blocks", "chat-agent-query", "jar"),
     ("org.pipelineframework.blocks", "openapi-representation-mapper", "jar"),
 ]
 artifacts = []

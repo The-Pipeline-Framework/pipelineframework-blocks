@@ -1,0 +1,70 @@
+version: 3
+
+types:
+  ConversationScope:
+    java: org.pipelineframework.connector.conversation.ConversationScope
+    fields: [[tenantId, string], [ownerId, string], [conversationId, string]]
+  ChatWindow:
+    java: org.pipelineframework.blocks.chat.ChatWindow
+    fields: [[contextLimitTokens, int32], [instructionTokens, int32], [reservedOutputTokens, int32], [maxEntryBytes, int32]]
+  ChatEvidence:
+    java: org.pipelineframework.blocks.chat.ChatEvidence
+    fields:
+      - [entryId, string]
+      - [provenance, string]
+      - [text, string]
+      - { name: payloadReference, type: payload_ref, presence: OPTIONAL }
+  ChatState:
+    java: org.pipelineframework.blocks.chat.ChatState
+    fields:
+      - [scope, ConversationScope]
+      - [messageId, string]
+      - [message, string]
+      - [window, ChatWindow]
+      - { name: evidence, repeated: ChatEvidence }
+      - [omittedEntries, int32]
+  ChatPromptEntry:
+    java: org.pipelineframework.blocks.chat.ChatPromptEntry
+    fields: [[provenance, string], [text, string]]
+  ChatPrompt:
+    java: org.pipelineframework.blocks.chat.ChatPrompt
+    fields:
+      - [state, ChatState]
+      - { name: context, repeated: ChatPromptEntry }
+      - [message, string]
+  ChatModelReply:
+    java: org.pipelineframework.blocks.chat.ChatModelReply
+    fields: [[text, string]]
+  ChatCompletion:
+    java: org.pipelineframework.blocks.chat.ChatCompletion
+    fields: [[state, ChatState], [reply, ChatModelReply]]
+  ChatReply:
+    java: org.pipelineframework.blocks.chat.ChatReply
+    fields: [[messageId, string], [proposedNextState, ChatState], [text, string]]
+  ChatProposal:
+    java: org.pipelineframework.blocks.chat.ChatProposal
+    fields: [[binding, string], [operation, string], [argumentsJson, string], [kind, string]]
+  ChatHandoff:
+    java: org.pipelineframework.blocks.chat.ChatHandoff
+    fields: [[state, ChatState], [proposal, ChatProposal]]
+  ChatResult:
+    java: org.pipelineframework.blocks.chat.ChatResult
+    fields:
+      - [disposition, string]
+      - { name: reply, type: ChatReply, presence: OPTIONAL }
+      - { name: handoff, type: ChatHandoff, presence: OPTIONAL }
+
+pipelines:
+  chat-context:
+    input: ChatState
+    output: ChatPrompt
+    steps:
+      - name: Select chat context
+        service: org.pipelineframework.blocks.chat.PrepareChatTurnService
+        cardinality: ONE_TO_ONE
+        input: ChatState
+        output: ChatPrompt
+        terminal: true
+        java:
+          input: org.pipelineframework.blocks.chat.ChatState
+          output: org.pipelineframework.blocks.chat.ChatPrompt
