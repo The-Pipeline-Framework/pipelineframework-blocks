@@ -47,17 +47,18 @@ public final class ReduceChatQueryObservationService
             throw new IllegalArgumentException(
                 "Query observation cannot be carried as bounded text; return a concise result or PayloadReference");
         }
+        ChatState state;
         try {
-            ChatState state = JSON.readValue(context, TrustedContext.class).state();
-            String entryId = "query:" + java.util.UUID.nameUUIDFromBytes(
-                (state.messageId() + "\u0000" + binding + "\u0000" + operation).getBytes(StandardCharsets.UTF_8));
-            ChatState observed = state.appendEvidence(new ChatEvidence(
-                entryId, "query:" + binding + "/" + operation, text, Optional.empty()));
-            var prompt = new org.pipelineframework.blocks.chat.PrepareChatTurnService().prepare(observed);
-            return new ChatSynthesisPrompt(prompt.state(), prompt.context(), prompt.message());
+            state = JSON.readValue(context, TrustedContext.class).state();
         } catch (Exception failure) {
             throw new IllegalArgumentException("captured Query observation has invalid carried chat state", failure);
         }
+        String entryId = "query:" + java.util.UUID.nameUUIDFromBytes(
+            (state.messageId() + "\u0000" + binding + "\u0000" + operation).getBytes(StandardCharsets.UTF_8));
+        ChatState observed = state.appendEvidence(new ChatEvidence(
+            entryId, "query:" + binding + "/" + operation, text, Optional.empty()));
+        var prompt = new org.pipelineframework.blocks.chat.PrepareChatTurnService().prepare(observed);
+        return new ChatSynthesisPrompt(prompt.state(), prompt.context(), prompt.message());
     }
 
     private static void requireQuery(String kind) {

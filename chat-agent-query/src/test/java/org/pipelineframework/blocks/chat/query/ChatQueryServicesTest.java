@@ -42,4 +42,17 @@ class ChatQueryServicesTest {
                 "venue", "address.lookup", "tpf:query", 1, "found", "found", "{}", context,
                 "VenueAddress", "x".repeat(ChatState.MAX_ENTRY_BYTES + 1)))));
     }
+
+    @Test
+    void reportsObservationProvenanceErrorsWithoutBlamingCarriedState() throws Exception {
+        ChatState state = ChatState.start(SCOPE, "message-1", "Find venue");
+        String context = PipelineJson.mapper().writeValueAsString(Map.of("state", state));
+        var observation = new OperationObservation.Result(new OperationResultObservation(
+            "x".repeat(160), "address.lookup", "tpf:query", 1, "found", "found", "{}", context,
+            "VenueAddress", "{\"street\":\"Main Street 3\"}"));
+
+        var failure = assertThrows(IllegalArgumentException.class,
+            () -> ReduceChatQueryObservationService.reduce(observation));
+        assertTrue(failure.getMessage().contains("provenance"), failure.getMessage());
+    }
 }
