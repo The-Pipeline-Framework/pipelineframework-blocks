@@ -9,7 +9,13 @@ Published artifacts:
 - `org.pipelineframework.blocks:document-text-extraction`
 - `org.pipelineframework.blocks:graphql`
 - `org.pipelineframework.blocks:graphql-agent`
+- `org.pipelineframework.blocks:chat-agent` (one-inference conversation)
+- `org.pipelineframework.blocks:chat-agent-query` (optional one typed Query tool and synthesis)
 - `org.pipelineframework.blocks:openapi-representation-mapper`
+
+The two ChatAgent Blocks use the shared `chat-agent-core` library and its pure `chat-context` preparation
+Block. An application binds only the capabilities required by the ChatAgent variant it invokes. See the
+[ChatAgent authoring guide](https://pipelineframework.org/develop/blocks/chat-agent).
 
 Blocks consume released TPF contract and Connector artifacts. They do not own a runtime implementation, Quarkus
 extension, customer deployment, or separately operated worker infrastructure.

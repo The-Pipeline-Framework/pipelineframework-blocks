@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "namespace": "org.pipelineframework.chat",
+  "artifact": {
+    "groupId": "org.pipelineframework.blocks",
+    "artifactId": "chat-agent",
+    "version": "${project.version}"
+  },
+  "definitions": [
+    {
+      "name": "chat-agent",
+      "resource": "META-INF/pipeline/chat-agent.yaml",
+      "requires": { "llm.reply": { "kind": "QUERY" } }
+    }
+  ]
+}

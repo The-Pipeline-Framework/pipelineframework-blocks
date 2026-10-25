@@ -5,14 +5,18 @@ import os
 import pathlib
 import subprocess
 import tempfile
+import xml.etree.ElementTree as ET
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-VERSION = "26.9.4"
+VERSION = ET.parse(ROOT / "pom.xml").getroot().findtext("{http://maven.apache.org/POM/4.0.0}version", "").removesuffix("-SNAPSHOT")
 COORDS = [
     ("org.pipelineframework", "pipeline-blocks", "pom"),
     ("org.pipelineframework.blocks", "document-text-extraction", "jar"),
     ("org.pipelineframework.blocks", "graphql", "jar"),
     ("org.pipelineframework.blocks", "graphql-agent", "jar"),
+    ("org.pipelineframework.blocks", "chat-agent-core", "jar"),
+    ("org.pipelineframework.blocks", "chat-agent", "jar"),
+    ("org.pipelineframework.blocks", "chat-agent-query", "jar"),
     ("org.pipelineframework.blocks", "openapi-representation-mapper", "jar"),
 ]
 
@@ -51,7 +55,7 @@ for event, candidate_type, number in [("pull_request", "pr", "42"), ("push", "ma
         metadata = json.loads((candidate_root / "build-metadata.json").read_text())
         assert metadata["candidateVersion"] == candidate
         assert metadata["pullRequestNumber"] == (42 if number else None)
-        assert len(metadata["mavenArtifacts"]) == 5
+        assert len(metadata["mavenArtifacts"]) == len(COORDS)
         for artifact in metadata["mavenArtifacts"]:
             for item in artifact["files"]:
                 path = repository / pathlib.Path(*artifact["groupId"].split(".")) / artifact["artifactId"] / candidate / item["name"]
