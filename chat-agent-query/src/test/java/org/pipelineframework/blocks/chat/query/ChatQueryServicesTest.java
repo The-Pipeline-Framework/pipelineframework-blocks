@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.pipelineframework.blocks.chat.ChatState;
+import org.pipelineframework.blocks.chat.ChatResult;
 import org.pipelineframework.config.pipeline.PipelineJson;
 import org.pipelineframework.connector.conversation.ConversationScope;
 
@@ -54,5 +55,21 @@ class ChatQueryServicesTest {
         var failure = assertThrows(IllegalArgumentException.class,
             () -> ReduceChatQueryObservationService.reduce(observation));
         assertTrue(failure.getMessage().contains("provenance"), failure.getMessage());
+    }
+
+    @Test
+    void commandHandoffCarriesStateAndProposalWithoutDispatch() throws Exception {
+        ChatState state = ChatState.start(SCOPE, "message-2", "Open a match");
+        String context = PipelineJson.mapper().writeValueAsString(Map.of("state", state));
+        HandoffCall call = new HandoffCall("application", "match.open", "{\"hour\":19}", context);
+
+        ChatResult result = ProposeChatHandoffService.propose(call);
+
+        assertTrue(result.reply().isEmpty());
+        assertEquals(state, result.handoff().orElseThrow().state());
+        assertEquals("COMMAND", result.handoff().orElseThrow().proposal().kind());
+        assertEquals("{\"hour\":19}", result.handoff().orElseThrow().proposal().argumentsJson());
+        assertThrows(IllegalArgumentException.class, () -> ProposeChatHandoffService.propose(
+            new HandoffCall("application", "match.open", "{}", "{}")));
     }
 }
