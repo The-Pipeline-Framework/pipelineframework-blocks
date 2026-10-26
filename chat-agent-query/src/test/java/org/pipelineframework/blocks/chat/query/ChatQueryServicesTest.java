@@ -68,6 +68,8 @@ class ChatQueryServicesTest {
         assertTrue(result.reply().isEmpty());
         assertEquals(state, result.handoff().orElseThrow().state());
         assertEquals("COMMAND", result.handoff().orElseThrow().proposal().kind());
+        assertEquals("application", result.handoff().orElseThrow().proposal().binding());
+        assertEquals("match.open", result.handoff().orElseThrow().proposal().operation());
         assertEquals("{\"hour\":19}", result.handoff().orElseThrow().proposal().argumentsJson());
         assertThrows(IllegalArgumentException.class, () -> ProposeChatHandoffService.propose(
             new HandoffCall("application", "match.open", "{}", "{}")));
