@@ -6,7 +6,7 @@
 
     <groupId>org.pipelineframework</groupId>
     <artifactId>pipeline-blocks</artifactId>
-    <version>26.10.1-SNAPSHOT</version>
+    <version>26.10.1</version>
     <packaging>pom</packaging>
     <name>The Pipeline Framework Blocks</name>
     <description>Packaged reusable pipeline Blocks for The Pipeline Framework</description>
@@ -30,12 +30,12 @@
         <connection>scm:git:git@github.com:The-Pipeline-Framework/pipelineframework-blocks.git</connection>
         <developerConnection>scm:git:git@github.com:The-Pipeline-Framework/pipelineframework-blocks.git</developerConnection>
         <url>https://github.com/The-Pipeline-Framework/pipelineframework-blocks</url>
-        <tag>HEAD</tag>
+        <tag>v26.10.1</tag>
     </scm>
 
     <properties>
-        <pipelineframework.contracts.version>26.10.1-SNAPSHOT</pipelineframework.contracts.version>
-        <pipelineframework.connectors.version>26.10.1-SNAPSHOT</pipelineframework.connectors.version>
+        <pipelineframework.contracts.version>26.10.1</pipelineframework.contracts.version>
+        <pipelineframework.connectors.version>26.10.1</pipelineframework.connectors.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
         <enablePreview>true</enablePreview>
