@@ -77,6 +77,7 @@ pipelines:
   graphql-agent:
     input: GraphQlAgentState
     output: GraphQlAgentCompletion
+    recur: [GraphQlAgentState]
     steps:
       - name: Prepare GraphQL agent turn
         service: org.pipelineframework.blocks.graphql.agent.PrepareGraphQlAgentTurnService
@@ -135,20 +136,3 @@ pipelines:
         java:
           input: org.pipelineframework.blocks.graphql.agent.OperationObservation
           output: org.pipelineframework.blocks.graphql.agent.GraphQlAgentProgress
-      - name: Recur GraphQL agent
-        pipeline: graphql-agent
-        cardinality: ONE_TO_ONE
-        input: GraphQlAgentState
-        output: GraphQlAgentCompletion
-        java:
-          input: org.pipelineframework.blocks.graphql.agent.GraphQlAgentState
-          output: org.pipelineframework.blocks.graphql.agent.GraphQlAgentCompletion
-      - name: Finish GraphQL agent
-        service: org.pipelineframework.blocks.graphql.agent.FinishGraphQlAgentService
-        cardinality: ONE_TO_ONE
-        input: GraphQlAgentCompletion
-        output: GraphQlAgentCompletion
-        terminal: true
-        java:
-          input: org.pipelineframework.blocks.graphql.agent.GraphQlAgentCompletion
-          output: org.pipelineframework.blocks.graphql.agent.GraphQlAgentCompletion
