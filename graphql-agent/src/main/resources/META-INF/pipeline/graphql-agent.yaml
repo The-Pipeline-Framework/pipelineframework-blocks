@@ -70,6 +70,7 @@ types:
   GraphQlAgentProgress:
     java: org.pipelineframework.blocks.graphql.agent.GraphQlAgentProgress
     variants:
+      recur: GraphQlAgentState
       complete: GraphQlAgentCompletion
 
 pipelines:
