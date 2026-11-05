@@ -35,7 +35,7 @@
 
     <properties>
         <pipelineframework.contracts.version>26.11.2-SNAPSHOT</pipelineframework.contracts.version>
-        <pipelineframework.connectors.version>26.10.1</pipelineframework.connectors.version>
+        <pipelineframework.connectors.version>26.11.1-SNAPSHOT</pipelineframework.connectors.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
         <enablePreview>true</enablePreview>
