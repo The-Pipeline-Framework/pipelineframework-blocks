@@ -89,17 +89,9 @@ pipelines:
       - name: Recur mapping authoring
         pipeline: openapi-representation-mapper
         cardinality: ONE_TO_ONE
-        input: OpenApiMappingState
+        input: OpenApiMappingProgress
+        accepts: [OpenApiMappingState]
         output: OpenApiRepresentationMappingProposal
         java:
           input: org.pipelineframework.blocks.openapi.mapping.OpenApiMappingState
-          output: org.pipelineframework.blocks.openapi.mapping.OpenApiRepresentationMappingProposal
-      - name: Finish mapping authoring
-        service: org.pipelineframework.blocks.openapi.mapping.FinishOpenApiRepresentationMappingService
-        cardinality: ONE_TO_ONE
-        input: OpenApiRepresentationMappingProposal
-        output: OpenApiRepresentationMappingProposal
-        terminal: true
-        java:
-          input: org.pipelineframework.blocks.openapi.mapping.OpenApiRepresentationMappingProposal
           output: org.pipelineframework.blocks.openapi.mapping.OpenApiRepresentationMappingProposal
